@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Custom.EditText" parent="">
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">10dp</item>
+    </style>
+</resources>
