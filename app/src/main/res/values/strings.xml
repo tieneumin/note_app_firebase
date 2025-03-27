@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MOB 2.2</string>
+
+    <string name="no_notes_added">No notes added</string>
+    <string name="title">Title</string>
+    <string name="desc">Description</string>
 </resources>

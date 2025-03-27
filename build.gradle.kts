@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     // https://developer.android.com/training/dependency-injection/hilt-android
     id("com.google.dagger.hilt.android") version "2.55" apply false
+    alias(libs.plugins.google.gms.google.services) apply false
 }
