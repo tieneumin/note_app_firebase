@@ -20,13 +20,13 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-//        handleIntent(HomeIntent.GetNotes)
+//        handleIntent(HomeIntent.FetchNotes)
         getNotes()
     }
 
 //    private fun handleIntent(intent: HomeIntent) {
 //        when (intent) {
-//            HomeIntent.GetNotes -> getNotes()
+//            HomeIntent.FetchNotes -> getNotes()
 //        }
 //    }
 
@@ -45,10 +45,10 @@ class HomeViewModel @Inject constructor(
 
 data class HomeState(
     val notes: List<Note> = emptyList(),
-    val errorMessage: String = "",
     val isLoading: Boolean = true,
+    val errorMessage: String? = null,
 )
 
 //sealed class HomeIntent {
-//    object GetNotes : HomeIntent()
+//    object FetchNotes : HomeIntent()
 //}

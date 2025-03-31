@@ -6,10 +6,11 @@
 
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
-    <color name="blue">#1976D2</color>
+    <color name="blue">#2196F3</color>
 
     <color name="option_red">#FFB2B2</color>
-    <color name="option_blue">#ABE6FF</color>
-    <color name="option_green">#CEFFB2</color>
+    <color name="option_orange">#FFC8A2</color>
     <color name="option_yellow">#FDFFB0</color>
+    <color name="option_green">#B8F5A2</color>
+    <color name="option_blue">#A8DCFF</color>
 </resources>

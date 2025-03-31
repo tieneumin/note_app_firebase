@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.noteappfirebase.core.showError
+import com.example.noteappfirebase.core.showErrorSnackbar
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
 import com.example.noteappfirebase.ui.adapter.NoteAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,30 +32,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupAdapter()
-        binding.fabAdd.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToAddFragment()
-            findNavController().navigate(action)
-        }
-        setupStateObservers()
-    }
-
-    private fun setupStateObservers() {
-        lifecycleScope.launch {
-            viewModel.state.collect { state ->
-                binding.run {
-                    adapter.setNotes(state.notes)
-                    tvLoading.isVisible = state.isLoading
-                    if (!state.isLoading && state.errorMessage.isEmpty()) {
-                        tvEmpty.isVisible = state.notes.isEmpty()
-                    }
-                    if (state.errorMessage.isNotEmpty()) {
-                        showError(requireView(), requireContext(), state.errorMessage)
-                    }
-                }
-            }
-        }
+        setupUiComponents()
+        setupStateObserver()
     }
 
     private fun setupAdapter() {
@@ -63,5 +42,29 @@ class HomeFragment : Fragment() {
         binding.rvNotes.adapter = adapter
         binding.rvNotes.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+    }
+
+    private fun setupUiComponents() {
+        binding.fabAdd.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeToAdd()
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun setupStateObserver() {
+        lifecycleScope.launch {
+            viewModel.state.collect { state ->
+                binding.run {
+                    adapter.setNotes(state.notes)
+                    tvLoading.isVisible = state.isLoading
+                    if (!state.isLoading && state.errorMessage.isNullOrEmpty()) {
+                        tvEmpty.isVisible = state.notes.isEmpty()
+                    }
+                    state.errorMessage?.let {
+                        showErrorSnackbar(requireView(), it, requireContext())
+                    }
+                }
+            }
+        }
     }
 }

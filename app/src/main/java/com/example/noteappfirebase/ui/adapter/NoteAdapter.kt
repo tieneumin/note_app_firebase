@@ -36,7 +36,7 @@ class NoteAdapter(
             binding.run {
                 tvTitle.text = note.title.crop(12)
                 tvDesc.text = note.desc.crop(74)
-                mcvNote.setCardBackgroundColor(note.color)
+                note.color?.let { mcvNote.setCardBackgroundColor(it) }
             }
         }
     }
