@@ -2,6 +2,7 @@
     <string name="app_name">MOB 2.2</string>
 
     <string name="no_notes_added">No notes added</string>
+    <string name="loading">Loading…</string>
     <string name="title">Title</string>
-    <string name="desc">Description</string>
+    <string name="description">Description</string>
 </resources>

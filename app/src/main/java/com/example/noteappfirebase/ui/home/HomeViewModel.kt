@@ -20,6 +20,7 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+//        handleIntent(HomeIntent.GetNotes)
         getNotes()
     }
 
@@ -30,19 +31,25 @@ class HomeViewModel @Inject constructor(
 //    }
 
     private fun getNotes() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.getNotes().collect { items ->
-                _state.update { it.copy(notes = items) }
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.getNotes().collect { items ->
+                    _state.update { it.copy(notes = items, isLoading = false) }
+                }
             }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message.toString(), isLoading = false) }
         }
     }
 }
 
-// intent => user interaction; getNotes() inits w/o user interaction .'. commented out
-// sealed class HomeIntent {
-//    data object GetNotes : HomeIntent()
+data class HomeState(
+    val notes: List<Note> = emptyList(),
+    val errorMessage: String = "",
+    val isLoading: Boolean = true,
+)
+
+//sealed class HomeIntent {
+//    object GetNotes : HomeIntent()
 //}
 
-data class HomeState(
-    val notes: List<Note> = emptyList()
-)

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.noteappfirebase.core.showError
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
 import com.example.noteappfirebase.ui.adapter.NoteAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,16 +31,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupAdapter()
-        observeState()
+        setupStateObservers()
     }
 
-    private fun observeState() {
+    private fun setupStateObservers() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-                adapter.setNotes(state.notes)
-                binding.tvEmpty.isVisible = state.notes.isEmpty()
+                binding.run {
+                    adapter.setNotes(state.notes)
+                    tvLoading.isVisible = state.isLoading
+                    if (!state.isLoading && state.errorMessage.isEmpty()) {
+                        tvEmpty.isVisible = state.notes.isEmpty()
+                    }
+                    if (state.errorMessage.isNotEmpty()) {
+                        showError(requireView(), requireContext(), state.errorMessage)
+                    }
+                }
             }
         }
     }

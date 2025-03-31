@@ -22,6 +22,16 @@
             android:gravity="center"
             android:text="@string/no_notes_added"
             android:textSize="16sp"
+            android:textStyle="italic"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tvLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/loading"
+            android:textSize="16sp"
             android:textStyle="italic" />
     </FrameLayout>
 

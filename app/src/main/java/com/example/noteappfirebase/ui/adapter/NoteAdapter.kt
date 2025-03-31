@@ -1,6 +1,5 @@
 package com.example.noteappfirebase.ui.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,7 @@ import com.example.noteappfirebase.databinding.ItemNoteBinding
 
 class NoteAdapter(
     private var notes: List<Note>
-): RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,11 +31,11 @@ class NoteAdapter(
 
     inner class NoteViewHolder(
         private val binding: ItemNoteBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
             binding.run {
-                tvTitle.text = note.title.crop(10)
-                tvDesc.text = note.desc.crop(64)
+                tvTitle.text = note.title.crop(12)
+                tvDesc.text = note.desc.crop(74)
             }
         }
     }
