@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteappfirebase.core.showError
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
@@ -31,7 +32,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupAdapter()
+        binding.fabAdd.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToAddFragment()
+            findNavController().navigate(action)
+        }
         setupStateObservers()
     }
 

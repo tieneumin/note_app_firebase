@@ -5,4 +5,8 @@
     <string name="loading">Loading…</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="enter_description">Enter description</string>
+    <string name="enter_title">Enter title</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>

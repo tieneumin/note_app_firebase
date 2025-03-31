@@ -52,4 +52,3 @@ data class HomeState(
 //sealed class HomeIntent {
 //    object GetNotes : HomeIntent()
 //}
-

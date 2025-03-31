@@ -17,7 +17,7 @@ class NoteAdapter(
         return NoteViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: NoteAdapter.NoteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
         holder.bind(note)
     }
@@ -36,6 +36,7 @@ class NoteAdapter(
             binding.run {
                 tvTitle.text = note.title.crop(12)
                 tvDesc.text = note.desc.crop(74)
+                mcvNote.setCardBackgroundColor(note.color)
             }
         }
     }
