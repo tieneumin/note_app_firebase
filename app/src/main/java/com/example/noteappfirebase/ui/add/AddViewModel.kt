@@ -24,6 +24,7 @@ class AddViewModel @Inject constructor(
         when (intent) {
             is AddIntent.ChangeColor -> setBackgroundColor(intent.color)
             is AddIntent.SaveNote -> addNote(intent.note)
+            is AddIntent.ClearMessage -> resetMessages()
         }
     }
 
@@ -47,7 +48,7 @@ class AddViewModel @Inject constructor(
         }
     }
 
-    fun clearMessages() {
+    fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
 }
@@ -61,4 +62,5 @@ data class AddState(
 sealed class AddIntent {
     class ChangeColor(val color: Int) : AddIntent()
     class SaveNote(val note: Note) : AddIntent()
+    object ClearMessage : AddIntent()
 }
