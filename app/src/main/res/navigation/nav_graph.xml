@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_home_to_add"
             app:destination="@id/addFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
     <fragment
@@ -18,6 +21,18 @@
         android:name="com.example.noteappfirebase.ui.add.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add">
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.noteappfirebase.ui.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="id"
+            app:argType="string" />
+<!--        <action-->
+<!--            android:id="@+id/action_detailsFragment_to_editFragment"-->
+<!--            app:destination="@id/editFragment" />-->
     </fragment>
 
 </navigation>
