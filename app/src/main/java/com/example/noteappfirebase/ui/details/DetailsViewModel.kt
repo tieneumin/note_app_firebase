@@ -1,7 +1,9 @@
 package com.example.noteappfirebase.ui.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.noteappfirebase.core.log
 import com.example.noteappfirebase.data.model.Note
 import com.example.noteappfirebase.data.repo.NoteRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +18,18 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val repo : NoteRepo
 ): ViewModel() {
+
     private val _state = MutableStateFlow(DetailsState())
     val state = _state.asStateFlow()
 
-    fun getNote(id: String) {
+    fun handleIntent(intent: DetailsIntent) {
+        when (intent) {
+            is DetailsIntent.GetNote -> getNote(intent.id)
+        }
+
+    }
+
+    private fun getNote(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val note = repo.getNote(id)
@@ -41,3 +51,7 @@ data class DetailsState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
 )
+
+sealed class DetailsIntent {
+    class GetNote(val id: String) : DetailsIntent()
+}

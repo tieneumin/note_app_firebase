@@ -10,4 +10,7 @@
     <string name="enter_title">Enter title</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete_message">Delete Note?</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>
