@@ -2,7 +2,7 @@
 <resources>
     <style name="Custom.EditText" parent="">
         <item name="android:background">@drawable/bg_edit_text</item>
-        <item name="android:paddingHorizontal">10dp</item>
-        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingHorizontal">@dimen/xs</item>
+        <item name="android:paddingVertical">@dimen/xs</item>
     </style>
 </resources>

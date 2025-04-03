@@ -59,6 +59,7 @@ class EditViewModel @Inject constructor(
         try {
             require(note.title.isNotBlank()) { "Title cannot be blank" }
             require(note.desc.isNotBlank()) { "Description cannot be blank" }
+            require(note.desc.length <= 100) { "Description cannot be more than 1000 characters" }
 
             viewModelScope.launch(Dispatchers.IO) {
                 repo.editNote(note.copy(id = id))

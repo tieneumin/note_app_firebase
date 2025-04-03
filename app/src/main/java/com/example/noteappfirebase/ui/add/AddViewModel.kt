@@ -24,6 +24,7 @@ class AddViewModel @Inject constructor(
         when (intent) {
             is AddIntent.ChangeColor -> setBackgroundColor(intent.color)
             is AddIntent.SaveNote -> addNote(intent.note)
+            is AddIntent.ClearMessages -> resetMessages()
         }
     }
 
@@ -35,6 +36,7 @@ class AddViewModel @Inject constructor(
         try {
             require(note.title.isNotBlank()) { "Title cannot be blank" }
             require(note.desc.isNotBlank()) { "Description cannot be blank" }
+            require(note.desc.length <= 100) { "Description cannot be more than 1000 characters" }
 
             viewModelScope.launch(Dispatchers.IO) {
                 repo.addNote(note)
@@ -47,7 +49,7 @@ class AddViewModel @Inject constructor(
         }
     }
 
-    fun clearMessages() {
+    fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
 }
@@ -61,4 +63,5 @@ data class AddState(
 sealed class AddIntent {
     class ChangeColor(val color: Int) : AddIntent()
     class SaveNote(val note: Note) : AddIntent()
+    object ClearMessages : AddIntent()
 }

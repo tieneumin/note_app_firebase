@@ -18,15 +18,15 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val repo : NoteRepo
 ): ViewModel() {
-
     private val _state = MutableStateFlow(DetailsState())
     val state = _state.asStateFlow()
 
     fun handleIntent(intent: DetailsIntent) {
         when (intent) {
             is DetailsIntent.GetNote -> getNote(intent.id)
+            is DetailsIntent.DeleteNote -> deleteNote(intent.id)
+            DetailsIntent.ClearMessage -> resetMessage()
         }
-
     }
 
     private fun getNote(id: String) {
@@ -44,6 +44,21 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    private fun deleteNote(id: String) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.deleteNote(id)
+                _state.update { it.copy(note = null, isLoading = false) }
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message.toString(), isLoading = false) }
+        }
+    }
+
+    fun resetMessage() {
+        _state.update { it.copy(errorMessage = null) }
+    }
+
 }
 
 data class DetailsState(
@@ -54,4 +69,6 @@ data class DetailsState(
 
 sealed class DetailsIntent {
     class GetNote(val id: String) : DetailsIntent()
+    class DeleteNote(val id: String) : DetailsIntent()
+    object ClearMessage : DetailsIntent()
 }

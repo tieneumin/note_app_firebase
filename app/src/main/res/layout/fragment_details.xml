@@ -3,68 +3,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="@dimen/m"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/xxm"
     tools:context=".ui.details.DetailsFragment">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:id="@+id/llNote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_margin="@dimen/m"
-        android:layout_gravity="top">
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvNote"
+            android:layout_width="match_parent"
+            android:layout_marginVertical="@dimen/s"
+            android:layout_height="500dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/xxm"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/xs"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:text="@string/title"
+                    />
+
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/s"
+                    android:textSize="20sp"
+                    android:text="@string/description"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginVertical="@dimen/m"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:iconTint="@color/black"
+                    android:backgroundTint="@color/yellow"
+                    android:text="@string/edit"
+                    android:layout_marginRight="@dimen/xxxxl"
+                    app:icon="@drawable/ic_edit" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:iconTint="@color/black"
+                    android:text="@string/delete"
+                    android:backgroundTint="@color/red"
+                    app:icon="@drawable/ic_delete" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/xxm"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/xs"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:text="@string/title"
-                />
-
-            <TextView
-                android:id="@+id/tvDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/s"
-                android:textSize="20sp"
-                android:text="@string/description"
-                />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginVertical="@dimen/m"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/yellow"
-            android:layout_marginRight="@dimen/xxxxxxl"
-            android:src="@drawable/ic_edit" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:src="@drawable/ic_delete" />
+            android:backgroundTint="@color/blue"
+            android:layout_gravity="center"
+            android:text="@string/back"
+            app:iconGravity="textStart"
+            app:icon="@drawable/ic_back" />
 
     </LinearLayout>
 
