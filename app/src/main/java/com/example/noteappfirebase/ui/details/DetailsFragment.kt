@@ -38,8 +38,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setupUi() {
-        val noteId = args.id
-        viewModel.getNote(noteId)
+        viewModel.handleIntent(DetailsIntent.FetchNote(args.id))
     }
 
     private fun setupStateObserver() {

@@ -44,18 +44,16 @@ class HomeFragment : Fragment() {
         binding.rvNotes.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        adapter.setClickListener(object : NoteAdapter.ClickListener {
-            override fun onClickItem(item: Note) {
-                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item.id.toString())
+        adapter.listener = object : NoteAdapter.Listener {
+            override fun onClickNote(id: String) {
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(id)
                 findNavController().navigate(action)
             }
-        })
 
-        adapter.setLongClickListener(object : NoteAdapter.LongClickListener {
-            override fun onLongClickItem(item: Note) {
+            override fun onLongClickNote(id: String) {
                 TODO("Not yet implemented")
             }
-        })
+        }
 
     }
 

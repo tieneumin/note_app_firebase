@@ -19,10 +19,16 @@ class DetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow(DetailsState())
     val state = _state.asStateFlow()
 
-    fun getNote(id: String) {
+    fun handleIntent(intent: DetailsIntent) {
+        when (intent) {
+            is DetailsIntent.FetchNote -> getNoteById(intent.id)
+        }
+    }
+
+    private fun getNoteById(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val note = repo.getNote(id)
+                val note = repo.getNoteById(id)
                 if (note != null){
                     _state.update { it.copy(note = note, isLoading = false) }
                 }else {
@@ -41,3 +47,7 @@ data class DetailsState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
 )
+
+sealed class DetailsIntent {
+    class FetchNote(val id: String): DetailsIntent()
+}
