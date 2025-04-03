@@ -52,7 +52,7 @@ class NoteAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
             binding.run {
-                tvTitle.text = note.title.crop(10)
+                tvTitle.text = note.title.crop(12)
                 tvDesc.text = note.desc.crop(51)
                 note.color?.let { mcvNote.setCardBackgroundColor(it) }
 

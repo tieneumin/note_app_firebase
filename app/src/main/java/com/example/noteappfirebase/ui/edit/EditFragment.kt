@@ -80,7 +80,7 @@ class EditFragment : Fragment() {
                         llEdit.isVisible = true
                         etTitle.setText(state.note.title)
                         etDesc.setText(state.note.desc)
-                        clEdit.setBackgroundColor(state.color)
+                        llEdit.setBackgroundColor(state.color)
                     }
                     state.successMessage?.let {
                         showToast(requireContext(), it)
