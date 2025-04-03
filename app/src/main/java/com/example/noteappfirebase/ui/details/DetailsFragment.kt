@@ -33,12 +33,9 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi()
-        setupStateObserver()
-    }
-
-    private fun setupUi() {
         viewModel.handleIntent(DetailsIntent.FetchNote(args.id))
+
+        setupStateObserver()
     }
 
     private fun setupStateObserver() {
