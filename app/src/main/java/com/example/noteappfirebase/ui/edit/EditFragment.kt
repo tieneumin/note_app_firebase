@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 class EditFragment : Fragment() {
     private lateinit var binding: FragmentEditBinding
     private val viewModel: EditViewModel by viewModels()
+    private val args: EditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +38,7 @@ class EditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.handleIntent(EditIntent.FetchNote(args.id))
         setupUiComponents()
         setupStateObserver()
     }

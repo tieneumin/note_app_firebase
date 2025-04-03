@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.noteappfirebase.R
-import com.example.noteappfirebase.core.log
 import com.example.noteappfirebase.core.showErrorSnackbar
 import com.example.noteappfirebase.data.model.Note
 import com.example.noteappfirebase.databinding.FragmentDetailsBinding
@@ -34,19 +32,10 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.handleIntent(DetailsIntent.GetNote(args.id))
-        setupUi()
-        setupStateObserver()
-    }
 
-    private fun setupUi() {
-        binding.run {
-            btnEdit.setOnClickListener {
-                log(args.id)
-                val action = DetailsFragmentDirections.actionDetailsFragmentToEditFragment(args.id)
-                findNavController().navigate(action)
-            }
-        }
+        viewModel.handleIntent(DetailsIntent.FetchNote(args.id))
+
+        setupStateObserver()
     }
 
     private fun setupStateObserver() {
@@ -56,8 +45,8 @@ class DetailsFragment : Fragment() {
                     tvLoading.isVisible = state.isLoading
                     if (state.note != null && state.errorMessage.isNullOrEmpty() && !state.isLoading) {
                         llNote.isVisible = true
-                        tvTitle.setText(state.note.title)
-                        tvDesc.setText(state.note.desc)
+                        tvTitle.text = state.note.title
+                        tvDesc.text = state.note.desc
                         llNote.setBackgroundColor(state.note.color)
                     }
                     state.errorMessage?.let {
