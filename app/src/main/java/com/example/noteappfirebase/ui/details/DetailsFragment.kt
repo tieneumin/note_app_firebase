@@ -38,7 +38,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.handleIntent(DetailsIntent.GetNote(args.id))
+        viewModel.handleIntent(DetailsIntent.FetchNote(args.id))
         setupUi()
         setupStateObserver()
     }
@@ -80,9 +80,9 @@ class DetailsFragment : Fragment() {
                     tvLoading.isVisible = state.isLoading
                     if (state.note != null && state.errorMessage.isNullOrEmpty() && !state.isLoading) {
                         llNote.isVisible = true
-                        tvTitle.setText(state.note.title)
-                        tvDesc.setText(state.note.desc)
-                        mcvNote.setBackgroundColor(state.note.color)
+                        tvTitle.text = state.note.title
+                        tvDesc.text = state.note.desc
+                        llNote.setBackgroundColor(state.note.color)
                     }
                     state.errorMessage?.let {
                         showErrorSnackbar(requireView(), it, requireContext())

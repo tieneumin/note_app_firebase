@@ -24,14 +24,19 @@ class EditViewModel @Inject constructor(
     private val _state = MutableStateFlow(EditState())
     val state = _state.asStateFlow()
 
-    init {
-        getNote()
+    fun handleIntent(intent: EditIntent) {
+        when (intent) {
+            is EditIntent.FetchNote -> getNoteById(intent.id)
+            is EditIntent.ChangeColor -> setBackgroundColor(intent.color)
+            is EditIntent.SaveNote -> editNote(intent.note)
+            is EditIntent.ClearMessage -> resetMessages()
+        }
     }
 
-    fun getNote() {
+    fun getNoteById(id:String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val note = repo.getNote(id)
+                val note = repo.getNoteById(id)
                 if (note != null) {
                     _state.update { it.copy(note = note, color = note.color, isLoading = false) }
                 } else {
@@ -40,14 +45,6 @@ class EditViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             _state.update { it.copy(errorMessage = e.message.toString(), isLoading = false) }
-        }
-    }
-
-    fun handleIntent(intent: EditIntent) {
-        when (intent) {
-            is EditIntent.ChangeColor -> setBackgroundColor(intent.color)
-            is EditIntent.SaveNote -> editNote(intent.note)
-            is EditIntent.ClearMessage -> resetMessages()
         }
     }
 
@@ -61,7 +58,7 @@ class EditViewModel @Inject constructor(
             require(note.desc.isNotBlank()) { "Description cannot be blank" }
 
             viewModelScope.launch(Dispatchers.IO) {
-                repo.editNote(note.copy(id = id))
+                repo.updateNote(note.copy(id = id))
                 withContext(Dispatchers.Main) {
                     _state.update { it.copy(successMessage = "Note updated") }
                 }
@@ -85,6 +82,7 @@ data class EditState(
 )
 
 sealed class EditIntent {
+    class FetchNote(val id: String) : EditIntent()
     class ChangeColor(val color: Int) : EditIntent()
     class SaveNote(val note: Note) : EditIntent()
     object ClearMessage : EditIntent()

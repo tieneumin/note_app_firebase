@@ -49,16 +49,14 @@ class HomeFragment : Fragment() {
         binding.rvNotes.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        adapter.setClickListener(object : NoteAdapter.ClickListener {
-            override fun onClickItem(item: Note) {
-                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item.id.toString())
+        adapter.listener = object : NoteAdapter.Listener {
+            override fun onClickNote(id: String) {
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(id)
                 findNavController().navigate(action)
             }
-        })
 
-        adapter.setLongClickListener(object : NoteAdapter.LongClickListener {
-            override fun onLongClickItem(item: Note) {
-                if (item.id != null){
+            override fun onLongClickNote(id: String) {
+                if (id != null){
                     BottomSheetFragment(
                         onDelete = {
                             val dialogView = LayoutInflater.from(requireContext()).inflate(dialog_delete, null)
@@ -72,7 +70,7 @@ class HomeFragment : Fragment() {
                             }
 
                             dialogView.findViewById<Button>(R.id.btnDelete).setOnClickListener {
-                                viewModel.handleIntent(HomeIntent.DeleteNote(item.id))
+                                viewModel.handleIntent(HomeIntent.DeleteNote(id))
                                 viewModel.handleIntent(HomeIntent.ClearMessage)
                                 dialog.dismiss()
                             }
@@ -80,13 +78,13 @@ class HomeFragment : Fragment() {
                             dialog.show()
                         },
                         onEdit = {
-                            val action = HomeFragmentDirections.actionHomeFragmentToEditFragment(item.id)
+                            val action = HomeFragmentDirections.actionHomeFragmentToEditFragment(id)
                             findNavController().navigate(action)
                         }
                     ).show(childFragmentManager, "NoteBottomSheetFragment")
                 }
             }
-        })
+        }
 
     }
 
