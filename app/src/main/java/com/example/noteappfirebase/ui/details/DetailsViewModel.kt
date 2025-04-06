@@ -10,20 +10,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repo : NoteRepo
-): ViewModel() {
+    private val repo: NoteRepo
+) : ViewModel() {
     private val _state = MutableStateFlow(DetailsState())
     val state = _state.asStateFlow()
 
     fun handleIntent(intent: DetailsIntent) {
         when (intent) {
-            is DetailsIntent.FetchNote -> getNoteById(intent.id)
+            is DetailsIntent.RefreshNote -> getNoteById(intent.id)
             is DetailsIntent.DeleteNote -> deleteNote(intent.id)
-            DetailsIntent.ClearMessage -> resetMessage()
+            is DetailsIntent.ClearMessages -> resetMessages()
         }
     }
 
@@ -31,9 +32,9 @@ class DetailsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val note = repo.getNoteById(id)
-                if (note != null){
+                if (note != null) {
                     _state.update { it.copy(note = note, isLoading = false) }
-                }else {
+                } else {
                     _state.update { it.copy(errorMessage = "Note not found", isLoading = false) }
                 }
             }
@@ -46,27 +47,29 @@ class DetailsViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 repo.deleteNote(id)
-                _state.update { it.copy(note = null, isLoading = false) }
+                withContext(Dispatchers.Main) {
+                    _state.update { it.copy(successMessage = "Note deleted") }
+                }
             }
         } catch (e: Exception) {
-            _state.update { it.copy(errorMessage = e.message.toString(), isLoading = false) }
+            _state.update { it.copy(errorMessage = e.message.toString()) }
         }
     }
 
-    fun resetMessage() {
-        _state.update { it.copy(errorMessage = null) }
+    private fun resetMessages() {
+        _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
-
 }
 
 data class DetailsState(
     val note: Note? = null,
     val isLoading: Boolean = true,
+    val successMessage: String? = null,
     val errorMessage: String? = null,
 )
 
 sealed class DetailsIntent {
-    class FetchNote(val id: String): DetailsIntent()
+    class RefreshNote(val id: String) : DetailsIntent()
     class DeleteNote(val id: String) : DetailsIntent()
-    object ClearMessage : DetailsIntent()
+    object ClearMessages : DetailsIntent()
 }

@@ -70,7 +70,7 @@ class AddFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 binding.run {
-                    clAdd.setBackgroundColor(state.color)
+                    llAdd.setBackgroundColor(state.color)
                     state.successMessage?.let {
                         showToast(requireContext(), it)
                         viewModel.handleIntent(AddIntent.ClearMessages)
@@ -84,6 +84,4 @@ class AddFragment : Fragment() {
             }
         }
     }
-
-
 }

@@ -41,13 +41,9 @@ class NoteAdapter(
         fun bind(note: Note) {
             binding.run {
                 tvTitle.text = note.title.crop(12)
-                tvDesc.text = note.desc.crop(51)
-                note.color?.let { mcvNote.setCardBackgroundColor(it) }
-
-                mcvNote.setOnClickListener {
-                    listener?.onClickNote(note.id!!)
-                }
-
+                tvDesc.text = note.desc.crop(74)
+                mcvNote.setCardBackgroundColor(note.color)
+                mcvNote.setOnClickListener { listener?.onClickNote(note.id!!) }
                 mcvNote.setOnLongClickListener {
                     listener?.onLongClickNote(note.id!!)
                     true

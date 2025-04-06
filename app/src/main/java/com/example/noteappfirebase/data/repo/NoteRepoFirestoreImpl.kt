@@ -34,23 +34,21 @@ class NoteRepoFirestoreImpl(
         awaitClose { listener.remove() }
     }
 
+    override suspend fun getNoteById(id: String): Note? {
+        val task = getCollectionRef().document(id).get().await()
+        return task.toObject(Note::class.java)
+    }
+
     override suspend fun addNote(note: Note) {
         val docRef = getCollectionRef().document()
         docRef.set(note.copy(id = docRef.id)).await()
     }
 
-    override suspend fun getNoteById(id: String): Note? {
-        val task =  getCollectionRef().document(id).get().await()
-        return task.toObject(Note::class.java)
+    override suspend fun updateNote(note: Note) {
+        getCollectionRef().document(note.id!!).set(note).await()
     }
 
     override suspend fun deleteNote(id: String) {
         getCollectionRef().document(id).delete().await()
     }
-
-    override suspend fun updateNote(note: Note){
-       getCollectionRef().document(note.id!!).set(note.copy()).await()
-    }
-
-
 }

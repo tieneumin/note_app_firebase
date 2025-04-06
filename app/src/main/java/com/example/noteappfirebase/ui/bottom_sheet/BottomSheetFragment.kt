@@ -8,38 +8,29 @@ import com.example.noteappfirebase.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetFragment(
-    private val onDelete: () -> Unit,
-    private val onEdit: () -> Unit
+    private val onClickEdit: () -> Unit,
+    private val onClickDelete: () -> Unit
 ) : BottomSheetDialogFragment() {
-
-    private var _binding: FragmentBottomSheetBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentBottomSheetBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
+        binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnDelete.setOnClickListener {
-            onDelete()
-            dismiss()
-        }
-
         binding.btnEdit.setOnClickListener {
-            onEdit()
+            onClickEdit()
             dismiss()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        binding.btnDelete.setOnClickListener {
+            onClickDelete()
+            dismiss()
+        }
     }
 }

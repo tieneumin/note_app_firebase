@@ -1,7 +1,7 @@
 package com.example.noteappfirebase.core
 
+import android.app.AlertDialog
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -25,8 +25,22 @@ fun showToast(context: Context, message: String) {
 }
 
 fun showErrorSnackbar(view: View, message: String, context: Context) {
-    Snackbar.make(view, message, Snackbar.LENGTH_SHORT).apply {
-        setBackgroundTint(ContextCompat.getColor(context, R.color.red))
-        setTextColor(Color.WHITE)
-    }.show()
+    Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+        .setBackgroundTint(ContextCompat.getColor(context, R.color.red))
+        .show()
+}
+
+fun showDeleteNoteDialog(
+    context: Context,
+    intent: () -> Unit,
+) {
+    AlertDialog.Builder(context)
+        .setTitle("Delete note?")
+        .setMessage("This action cannot be undone.")
+        .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+        .setPositiveButton("Delete") { dialog, _ ->
+            intent()
+            dialog.dismiss()
+        }
+        .show()
 }

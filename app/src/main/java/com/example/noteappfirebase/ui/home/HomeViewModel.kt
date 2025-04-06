@@ -20,14 +20,13 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        handleIntent(HomeIntent.GetNotes)
+        getNotes()
     }
 
     fun handleIntent(intent: HomeIntent) {
         when (intent) {
-            is HomeIntent.GetNotes -> getNotes()
             is HomeIntent.DeleteNote -> deleteNote(intent.id)
-            is HomeIntent.ClearMessage -> resetMessages()
+            is HomeIntent.ClearMessages -> resetMessages()
         }
     }
 
@@ -43,7 +42,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun deleteNote(id: String) {
+    private fun deleteNote(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 repo.deleteNote(id)
@@ -55,7 +54,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun resetMessages() {
+    private fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
 }
@@ -68,7 +67,6 @@ data class HomeState(
 )
 
 sealed class HomeIntent {
-    object GetNotes : HomeIntent()
     class DeleteNote(val id: String) : HomeIntent()
-    object ClearMessage : HomeIntent()
+    object ClearMessages : HomeIntent()
 }

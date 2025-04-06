@@ -1,22 +1,19 @@
 package com.example.noteappfirebase.ui.home
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.noteappfirebase.core.showDeleteNoteDialog
 import com.example.noteappfirebase.core.showErrorSnackbar
-import com.example.noteappfirebase.data.model.Note
+import com.example.noteappfirebase.core.showToast
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
-import com.example.noteappfirebase.R
-import com.example.noteappfirebase.R.layout.dialog_delete
 import com.example.noteappfirebase.ui.adapter.NoteAdapter
 import com.example.noteappfirebase.ui.bottom_sheet.BottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,41 +48,24 @@ class HomeFragment : Fragment() {
 
         adapter.listener = object : NoteAdapter.Listener {
             override fun onClickNote(id: String) {
-                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(id)
+                val action = HomeFragmentDirections.actionHomeToDetails(id)
                 findNavController().navigate(action)
             }
 
             override fun onLongClickNote(id: String) {
-                if (id != null){
-                    BottomSheetFragment(
-                        onDelete = {
-                            val dialogView = LayoutInflater.from(requireContext()).inflate(dialog_delete, null)
-
-                            val dialog = AlertDialog.Builder(requireContext())
-                                .setView(dialogView)
-                                .create()
-
-                            dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-                                dialog.dismiss()
-                            }
-
-                            dialogView.findViewById<Button>(R.id.btnDelete).setOnClickListener {
-                                viewModel.handleIntent(HomeIntent.DeleteNote(id))
-                                viewModel.handleIntent(HomeIntent.ClearMessage)
-                                dialog.dismiss()
-                            }
-
-                            dialog.show()
-                        },
-                        onEdit = {
-                            val action = HomeFragmentDirections.actionHomeFragmentToEditFragment(id)
-                            findNavController().navigate(action)
+                BottomSheetFragment(
+                    onClickEdit = {
+                        val action = HomeFragmentDirections.actionToEdit(id)
+                        findNavController().navigate(action)
+                    },
+                    onClickDelete = {
+                        showDeleteNoteDialog(requireContext()) {
+                            viewModel.handleIntent(HomeIntent.DeleteNote(id))
                         }
-                    ).show(childFragmentManager, "NoteBottomSheetFragment")
-                }
+                    }
+                ).show(parentFragmentManager, null)
             }
         }
-
     }
 
     private fun setupUiComponents() {
@@ -104,8 +84,13 @@ class HomeFragment : Fragment() {
                     if (!state.isLoading && state.errorMessage.isNullOrEmpty()) {
                         tvEmpty.isVisible = state.notes.isEmpty()
                     }
+                    state.successMessage?.let {
+                        showToast(requireContext(), it)
+                        viewModel.handleIntent(HomeIntent.ClearMessages)
+                    }
                     state.errorMessage?.let {
                         showErrorSnackbar(requireView(), it, requireContext())
+                        viewModel.handleIntent(HomeIntent.ClearMessages)
                     }
                 }
             }

@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/xs"
+        android:layout_margin="@dimen/xxs"
         android:orientation="vertical">
 
         <TextView
@@ -17,8 +17,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:text="@string/title"
-            android:textSize="16sp"
-            android:layout_marginBottom="@dimen/xxs"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
