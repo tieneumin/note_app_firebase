@@ -17,23 +17,26 @@ import javax.inject.Inject
 @HiltViewModel
 class EditViewModel @Inject constructor(
     private val repo: NoteRepo,
-    private val savedStateHandle: SavedStateHandle
+    args: SavedStateHandle
 ) : ViewModel() {
-    private val id = savedStateHandle.get<String>("id") ?: ""
+    private val id = args.get<String>("id") ?: ""
 
     private val _state = MutableStateFlow(EditState())
     val state = _state.asStateFlow()
 
+    init {
+        getNoteById(id)
+    }
+
     fun handleIntent(intent: EditIntent) {
         when (intent) {
-            is EditIntent.FetchNote -> getNoteById(intent.id)
             is EditIntent.ChangeColor -> setBackgroundColor(intent.color)
-            is EditIntent.SaveNote -> editNote(intent.note)
-            is EditIntent.ClearMessage -> resetMessages()
+            is EditIntent.SaveNote -> updateNote(intent.note)
+            is EditIntent.ClearMessages -> resetMessages()
         }
     }
 
-    fun getNoteById(id:String) {
+    private fun getNoteById(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val note = repo.getNoteById(id)
@@ -52,7 +55,7 @@ class EditViewModel @Inject constructor(
         _state.update { it.copy(color = color) }
     }
 
-    fun editNote(note: Note) {
+    private fun updateNote(note: Note) {
         try {
             require(note.title.isNotBlank()) { "Title cannot be blank" }
             require(note.desc.isNotBlank()) { "Description cannot be blank" }
@@ -68,7 +71,7 @@ class EditViewModel @Inject constructor(
         }
     }
 
-    fun resetMessages() {
+    private fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
 }
@@ -82,8 +85,7 @@ data class EditState(
 )
 
 sealed class EditIntent {
-    class FetchNote(val id: String) : EditIntent()
     class ChangeColor(val color: Int) : EditIntent()
     class SaveNote(val note: Note) : EditIntent()
-    object ClearMessage : EditIntent()
+    object ClearMessages : EditIntent()
 }

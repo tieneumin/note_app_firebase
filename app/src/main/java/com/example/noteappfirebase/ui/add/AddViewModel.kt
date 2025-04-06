@@ -24,30 +24,31 @@ class AddViewModel @Inject constructor(
         when (intent) {
             is AddIntent.ChangeColor -> setBackgroundColor(intent.color)
             is AddIntent.SaveNote -> addNote(intent.note)
+            is AddIntent.ClearMessages -> resetMessages()
         }
     }
 
     private fun setBackgroundColor(color: Int) {
-        _state.update { it.copy(color) }
+        _state.update { it.copy(color = color) }
     }
 
     private fun addNote(note: Note) {
-        try {
-            require(note.title.isNotBlank()) { "Title cannot be blank" }
-            require(note.desc.isNotBlank()) { "Description cannot be blank" }
-
-            viewModelScope.launch(Dispatchers.IO) {
-                repo.addNote(note)
-                withContext(Dispatchers.Main) {
-                    _state.update { it.copy(successMessage = "Note added") }
-                }
-            }
-        } catch (e: Exception) {
-            _state.update { it.copy(errorMessage = e.message.toString()) }
-        }
+//        try {
+//            require(note.title.isNotBlank()) { "Title cannot be blank" }
+//            require(note.desc.isNotBlank()) { "Description cannot be blank" }
+//
+//            viewModelScope.launch(Dispatchers.IO) {
+//                repo.addNote(note)
+//                withContext(Dispatchers.Main) {
+//                    _state.update { it.copy(successMessage = "Note added") }
+//                }
+//            }
+//        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = "An error occurred") }
+//        }
     }
 
-    fun clearMessages() {
+    private fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
 }
@@ -61,4 +62,5 @@ data class AddState(
 sealed class AddIntent {
     class ChangeColor(val color: Int) : AddIntent()
     class SaveNote(val note: Note) : AddIntent()
+    object ClearMessages : AddIntent()
 }

@@ -20,15 +20,15 @@ class HomeViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-//        handleIntent(HomeIntent.FetchNotes)
         getNotes()
     }
 
-//    private fun handleIntent(intent: HomeIntent) {
-//        when (intent) {
-//            HomeIntent.FetchNotes -> getNotes()
-//        }
-//    }
+    fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.DeleteNote -> deleteNote(intent.id)
+            is HomeIntent.ClearMessages -> resetMessages()
+        }
+    }
 
     private fun getNotes() {
         try {
@@ -41,14 +41,32 @@ class HomeViewModel @Inject constructor(
             _state.update { it.copy(errorMessage = e.message.toString(), isLoading = false) }
         }
     }
+
+    private fun deleteNote(id: String) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.deleteNote(id)
+
+                _state.update { it.copy(successMessage = "Note deleted") }
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message.toString()) }
+        }
+    }
+
+    private fun resetMessages() {
+        _state.update { it.copy(successMessage = null, errorMessage = null) }
+    }
 }
 
 data class HomeState(
     val notes: List<Note> = emptyList(),
     val isLoading: Boolean = true,
+    val successMessage: String? = null,
     val errorMessage: String? = null,
 )
 
-//sealed class HomeIntent {
-//    object FetchNotes : HomeIntent()
-//}
+sealed class HomeIntent {
+    class DeleteNote(val id: String) : HomeIntent()
+    object ClearMessages : HomeIntent()
+}

@@ -70,20 +70,18 @@ class AddFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 binding.run {
-                    clAdd.setBackgroundColor(state.color)
+                    llAdd.setBackgroundColor(state.color)
                     state.successMessage?.let {
                         showToast(requireContext(), it)
-                        viewModel.clearMessages()
+                        viewModel.handleIntent(AddIntent.ClearMessages)
                         findNavController().popBackStack()
                     }
                     state.errorMessage?.let {
                         showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.clearMessages()
+                        viewModel.handleIntent(AddIntent.ClearMessages)
                     }
                 }
             }
         }
     }
-
-
 }

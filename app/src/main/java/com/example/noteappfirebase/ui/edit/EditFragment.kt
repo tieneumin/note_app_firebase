@@ -1,24 +1,20 @@
 package com.example.noteappfirebase.ui.edit
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.noteappfirebase.R
 import com.example.noteappfirebase.core.showErrorSnackbar
 import com.example.noteappfirebase.core.showToast
 import com.example.noteappfirebase.data.model.Note
 import com.example.noteappfirebase.databinding.FragmentEditBinding
-import com.example.noteappfirebase.ui.add.AddIntent
-import com.example.noteappfirebase.ui.edit.EditIntent
-import com.example.noteappfirebase.ui.edit.EditIntent.ClearMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,19 +22,16 @@ import kotlinx.coroutines.launch
 class EditFragment : Fragment() {
     private lateinit var binding: FragmentEditBinding
     private val viewModel: EditViewModel by viewModels()
-    private val args: EditFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentEditBinding.inflate(layoutInflater,container,false)
+        binding = FragmentEditBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.handleIntent(EditIntent.FetchNote(args.id))
         setupUiComponents()
         setupStateObserver()
     }
@@ -78,20 +71,20 @@ class EditFragment : Fragment() {
             viewModel.state.collect { state ->
                 binding.run {
                     tvLoading.isVisible = state.isLoading
-                    if (!state.isLoading && state.note != null && state.errorMessage.isNullOrEmpty()) {
+                    if (!state.isLoading && state.note != null && state.successMessage == null) {
                         llEdit.isVisible = true
                         etTitle.setText(state.note.title)
                         etDesc.setText(state.note.desc)
-                        clEdit.setBackgroundColor(state.color)
+                        llEdit.setBackgroundColor(state.color)
                     }
                     state.successMessage?.let {
                         showToast(requireContext(), it)
-                        viewModel.handleIntent(ClearMessage)
+                        viewModel.handleIntent(EditIntent.ClearMessages)
                         findNavController().popBackStack()
                     }
                     state.errorMessage?.let {
                         showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.handleIntent(ClearMessage)
+                        viewModel.handleIntent(EditIntent.ClearMessages)
                     }
                 }
             }
