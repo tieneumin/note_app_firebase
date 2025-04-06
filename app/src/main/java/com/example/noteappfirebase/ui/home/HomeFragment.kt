@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.noteappfirebase.core.showErrorSnackbar
+import com.example.noteappfirebase.data.model.Note
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
 import com.example.noteappfirebase.ui.adapter.NoteAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +43,18 @@ class HomeFragment : Fragment() {
         binding.rvNotes.adapter = adapter
         binding.rvNotes.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+        adapter.listener = object : NoteAdapter.Listener {
+            override fun onClickNote(id: String) {
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(id)
+                findNavController().navigate(action)
+            }
+
+            override fun onLongClickNote(id: String) {
+                TODO("Not yet implemented")
+            }
+        }
+
     }
 
     private fun setupUiComponents() {

@@ -10,6 +10,7 @@ import com.example.noteappfirebase.databinding.ItemNoteBinding
 class NoteAdapter(
     private var notes: List<Note>
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+    var listener: Listener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,14 +30,28 @@ class NoteAdapter(
         notifyDataSetChanged()
     }
 
+    interface Listener {
+        fun onClickNote(id: String)
+        fun onLongClickNote(id: String)
+    }
+
     inner class NoteViewHolder(
         private val binding: ItemNoteBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
             binding.run {
-                tvTitle.text = note.title.crop(12)
-                tvDesc.text = note.desc.crop(74)
+                tvTitle.text = note.title.crop(10)
+                tvDesc.text = note.desc.crop(51)
                 note.color?.let { mcvNote.setCardBackgroundColor(it) }
+
+                mcvNote.setOnClickListener {
+                    listener?.onClickNote(note.id!!)
+                }
+
+                mcvNote.setOnLongClickListener {
+                    listener?.onLongClickNote(note.id!!)
+                    true
+                }
             }
         }
     }
