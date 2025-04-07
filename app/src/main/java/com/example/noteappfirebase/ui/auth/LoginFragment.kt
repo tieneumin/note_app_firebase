@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
                 state.successMessage?.let {
                     showToast(requireContext(), it)
                     viewModel.handleIntent(LoginIntent.ClearMessages)
-                    findNavController().navigate(LoginFragmentDirections.actionToHome())
+                    findNavController().navigate(LoginFragmentDirections.actionLoginToHome())
                 }
                 state.errorMessage?.let {
                     showErrorSnackbar(requireView(), it, requireContext())

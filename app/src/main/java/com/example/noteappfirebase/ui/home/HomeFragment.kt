@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
             Glide.with(ivProfile).load(viewModel.getUserImage()).into(ivProfile)
             tvLogout.setOnClickListener {
                 viewModel.handleIntent(HomeIntent.Logout)
-                findNavController().navigate(HomeFragmentDirections.actionToLogin())
+                findNavController().navigate(HomeFragmentDirections.actionHomeToLogin())
             }
             fabAdd.setOnClickListener {
                 findNavController().navigate(HomeFragmentDirections.actionHomeToAdd())
