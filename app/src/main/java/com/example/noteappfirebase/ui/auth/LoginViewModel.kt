@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(
                 withContext(Dispatchers.Main) {
                     _state.update {
                         it.copy(
-                            successMessage = if (res) "Login successful" else null,
+                            successMessage = if (res) "Logged in successfully" else null,
                             errorMessage = if (!res) "Login failed" else null
                         )
                     }
@@ -51,7 +51,6 @@ class LoginViewModel @Inject constructor(
 }
 
 data class LoginState(
-    val isLoading: Boolean = true,
     val successMessage: String? = null,
     val errorMessage: String? = null,
 )

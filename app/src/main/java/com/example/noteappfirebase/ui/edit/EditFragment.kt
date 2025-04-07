@@ -71,21 +71,21 @@ class EditFragment : Fragment() {
             viewModel.state.collect { state ->
                 binding.run {
                     tvLoading.isVisible = state.isLoading
-                    if (!state.isLoading && state.note != null && state.successMessage == null) {
+                    if (state.note != null && state.successMessage == null) {
                         llEdit.isVisible = true
                         etTitle.setText(state.note.title)
                         etDesc.setText(state.note.desc)
                         llEdit.setBackgroundColor(state.color)
                     }
-                    state.successMessage?.let {
-                        showToast(requireContext(), it)
-                        viewModel.handleIntent(EditIntent.ClearMessages)
-                        findNavController().popBackStack()
-                    }
-                    state.errorMessage?.let {
-                        showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.handleIntent(EditIntent.ClearMessages)
-                    }
+                }
+                state.successMessage?.let {
+                    showToast(requireContext(), it)
+                    viewModel.handleIntent(EditIntent.ClearMessages)
+                    findNavController().popBackStack()
+                }
+                state.errorMessage?.let {
+                    showErrorSnackbar(requireView(), it, requireContext())
+                    viewModel.handleIntent(EditIntent.ClearMessages)
                 }
             }
         }

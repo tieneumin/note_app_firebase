@@ -23,7 +23,6 @@ class BottomSheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.btnEdit.setOnClickListener {
             onClickEdit()
             dismiss()

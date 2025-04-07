@@ -45,9 +45,7 @@ class DetailsFragment : Fragment() {
             }
             btnDelete.setOnClickListener {
                 showDeleteNoteDialog(requireContext()) {
-                    viewModel.handleIntent(
-                        DetailsIntent.DeleteNote(args.id)
-                    )
+                    viewModel.handleIntent(DetailsIntent.DeleteNote(args.id))
                 }
             }
             btnBack.setOnClickListener { findNavController().popBackStack() }
@@ -59,21 +57,21 @@ class DetailsFragment : Fragment() {
             viewModel.state.collect { state ->
                 binding.run {
                     tvLoading.isVisible = state.isLoading
-                    if (!state.isLoading && state.note != null) {
+                    if (state.note != null) {
                         llDetails.isVisible = true
                         tvTitle.text = state.note.title
                         tvDesc.text = state.note.desc
                         llDetails.setBackgroundColor(state.note.color)
                     }
-                    state.successMessage?.let {
-                        showToast(requireContext(), it)
-                        viewModel.handleIntent(DetailsIntent.ClearMessages)
-                        findNavController().popBackStack()
-                    }
-                    state.errorMessage?.let {
-                        showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.handleIntent(DetailsIntent.ClearMessages)
-                    }
+                }
+                state.successMessage?.let {
+                    showToast(requireContext(), it)
+                    viewModel.handleIntent(DetailsIntent.ClearMessages)
+                    findNavController().popBackStack()
+                }
+                state.errorMessage?.let {
+                    showErrorSnackbar(requireView(), it, requireContext())
+                    viewModel.handleIntent(DetailsIntent.ClearMessages)
                 }
             }
         }
