@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">NoteApp (Firebase)</string>
 
-    <string name="title">Title</string>
-    <string name="description">Description</string>
+    <string name="noteapp">NoteApp</string>
+    <string name="log_in_with_google">Log in with Google</string>
+
+    <string name="logout">Logout</string>
     <string name="loading">Loading…</string>
     <string name="no_notes_added">No notes added</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 
     <string name="enter_description">Enter description</string>
     <string name="enter_title">Enter title</string>

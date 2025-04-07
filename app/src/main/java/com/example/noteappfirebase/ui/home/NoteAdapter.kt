@@ -1,4 +1,4 @@
-package com.example.noteappfirebase.ui.adapter
+package com.example.noteappfirebase.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,11 +30,6 @@ class NoteAdapter(
         notifyDataSetChanged()
     }
 
-    interface Listener {
-        fun onClickNote(id: String)
-        fun onLongClickNote(id: String)
-    }
-
     inner class NoteViewHolder(
         private val binding: ItemNoteBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -50,5 +45,10 @@ class NoteAdapter(
                 }
             }
         }
+    }
+
+    interface Listener {
+        fun onClickNote(id: String)
+        fun onLongClickNote(id: String)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.noteappfirebase.ui.bottom_sheet
+package com.example.noteappfirebase.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

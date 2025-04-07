@@ -28,24 +28,21 @@ class AddViewModel @Inject constructor(
         }
     }
 
-    private fun setBackgroundColor(color: Int) {
-        _state.update { it.copy(color = color) }
-    }
-
+    private fun setBackgroundColor(color: Int) = _state.update { it.copy(color = color) }
     private fun addNote(note: Note) {
-//        try {
-//            require(note.title.isNotBlank()) { "Title cannot be blank" }
-//            require(note.desc.isNotBlank()) { "Description cannot be blank" }
-//
-//            viewModelScope.launch(Dispatchers.IO) {
-//                repo.addNote(note)
-//                withContext(Dispatchers.Main) {
-//                    _state.update { it.copy(successMessage = "Note added") }
-//                }
-//            }
-//        } catch (e: Exception) {
-            _state.update { it.copy(errorMessage = "An error occurred") }
-//        }
+        try {
+            require(note.title.isNotBlank()) { "Title cannot be blank" }
+            require(note.desc.isNotBlank()) { "Description cannot be blank" }
+
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.addNote(note)
+                withContext(Dispatchers.Main) {
+                    _state.update { it.copy(successMessage = "Note added") }
+                }
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message.toString()) }
+        }
     }
 
     private fun resetMessages() {

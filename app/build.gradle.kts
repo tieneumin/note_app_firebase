@@ -1,3 +1,15 @@
+//import java.io.FileInputStream
+//import java.util.Properties
+//
+//val localProperties = Properties()
+//val localPropertiesFile = rootProject.file("local.properties")
+//
+//if (localPropertiesFile.exists()) {
+//    localProperties.load(FileInputStream(localPropertiesFile))
+//}
+//
+//val serverClientId: String = localProperties.getProperty("server_client_id", "")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -24,6 +36,9 @@ android {
     }
 
     buildTypes {
+//        debug {
+//            buildConfigField("String", "SERVER_CLIENT_ID", "\"${serverClientId}\"")
+//        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -42,6 +57,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+//        buildConfig = true
     }
 }
 
@@ -60,6 +76,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,4 +87,7 @@ dependencies {
     // https://developer.android.com/training/dependency-injection/hilt-android
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    // https://github.com/bumptech/glide
+    implementation(libs.glide)
 }

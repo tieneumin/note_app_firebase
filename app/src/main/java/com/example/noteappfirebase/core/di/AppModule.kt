@@ -1,5 +1,7 @@
 package com.example.noteappfirebase.core.di
 
+import com.example.noteappfirebase.core.service.AuthService
+import com.example.noteappfirebase.core.service.AuthServiceImpl
 import com.example.noteappfirebase.data.repo.NoteRepo
 import com.example.noteappfirebase.data.repo.NoteRepoFirestoreImpl
 import dagger.Module
@@ -13,7 +15,13 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideNoteRepo(): NoteRepo {
-        return NoteRepoFirestoreImpl()
+    fun provideNoteRepo(authService: AuthService): NoteRepo {
+        return NoteRepoFirestoreImpl(authService = authService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthService(): AuthService {
+        return AuthServiceImpl()
     }
 }
