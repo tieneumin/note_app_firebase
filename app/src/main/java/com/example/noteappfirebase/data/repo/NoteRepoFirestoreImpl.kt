@@ -1,5 +1,6 @@
 package com.example.noteappfirebase.data.repo
 
+import com.example.noteappfirebase.core.service.AuthService
 import com.example.noteappfirebase.data.model.Note
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,10 +11,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class NoteRepoFirestoreImpl(
-    private val db: FirebaseFirestore = Firebase.firestore
+    private val db: FirebaseFirestore = Firebase.firestore,
+    private val authService: AuthService
 ) : NoteRepo {
     private fun getCollectionRef(): CollectionReference {
-        return db.collection("notes")
+        val uid = authService.getUid() ?: throw Exception("No valid user found")
+        return db.collection("users/$uid/notes")
     }
 
     override fun getNotes() = callbackFlow {

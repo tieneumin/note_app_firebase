@@ -2,6 +2,7 @@ package com.example.noteappfirebase.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.noteappfirebase.core.service.AuthService
 import com.example.noteappfirebase.data.model.Note
 import com.example.noteappfirebase.data.repo.NoteRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,24 +11,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repo: NoteRepo
+    private val repo: NoteRepo,
+    private val authService: AuthService
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     init {
         getNotes()
-    }
-
-    fun handleIntent(intent: HomeIntent) {
-        when (intent) {
-            is HomeIntent.DeleteNote -> deleteNote(intent.id)
-            is HomeIntent.ClearMessages -> resetMessages()
-        }
     }
 
     private fun getNotes() {
@@ -42,18 +38,30 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.DeleteNote -> deleteNote(intent.id)
+            is HomeIntent.Logout -> logout()
+//            is HomeIntent.LoadUserImage -> getUserImage()
+            is HomeIntent.ClearMessages -> resetMessages()
+        }
+    }
+
     private fun deleteNote(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 repo.deleteNote(id)
-
-                _state.update { it.copy(successMessage = "Note deleted") }
+                withContext(Dispatchers.Main) {
+                    _state.update { it.copy(successMessage = "Note deleted") }
+                }
             }
         } catch (e: Exception) {
             _state.update { it.copy(errorMessage = e.message.toString()) }
         }
     }
 
+    private fun logout() = authService.logout()
+    fun getUserImage() = authService.getLoggedInUser()?.photoUrl
     private fun resetMessages() {
         _state.update { it.copy(successMessage = null, errorMessage = null) }
     }
@@ -68,5 +76,7 @@ data class HomeState(
 
 sealed class HomeIntent {
     class DeleteNote(val id: String) : HomeIntent()
+    object Logout : HomeIntent()
+//    object LoadUserImage : HomeIntent()
     object ClearMessages : HomeIntent()
 }

@@ -3,15 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginFragment">
     <action
         android:id="@+id/action_to_edit"
         app:destination="@id/editFragment" />
 
     <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.noteappfirebase.ui.auth.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_home"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.noteappfirebase.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_login"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_home_to_add"
             app:destination="@id/addFragment" />
@@ -19,15 +34,15 @@
             android:id="@+id/action_home_to_details"
             app:destination="@id/detailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.noteappfirebase.ui.add.AddFragment"
-        android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add">
+    </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.example.noteappfirebase.ui.details.DetailsFragment"
-        android:label="fragment_details"
         tools:layout="@layout/fragment_details">
         <argument
             android:name="id"
@@ -36,7 +51,6 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="com.example.noteappfirebase.ui.edit.EditFragment"
-        android:label="fragment_edit"
         tools:layout="@layout/fragment_edit">
         <argument
             android:name="id"

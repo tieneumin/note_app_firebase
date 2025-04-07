@@ -41,8 +41,7 @@ class DetailsFragment : Fragment() {
     private fun setupUiComponents() {
         binding.run {
             btnEdit.setOnClickListener {
-                val action = DetailsFragmentDirections.actionToEdit(args.id)
-                findNavController().navigate(action)
+                findNavController().navigate(DetailsFragmentDirections.actionToEdit(args.id))
             }
             btnDelete.setOnClickListener {
                 showDeleteNoteDialog(requireContext()) {

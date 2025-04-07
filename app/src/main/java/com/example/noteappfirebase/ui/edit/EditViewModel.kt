@@ -28,14 +28,6 @@ class EditViewModel @Inject constructor(
         getNoteById(id)
     }
 
-    fun handleIntent(intent: EditIntent) {
-        when (intent) {
-            is EditIntent.ChangeColor -> setBackgroundColor(intent.color)
-            is EditIntent.SaveNote -> updateNote(intent.note)
-            is EditIntent.ClearMessages -> resetMessages()
-        }
-    }
-
     private fun getNoteById(id: String) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
@@ -51,10 +43,15 @@ class EditViewModel @Inject constructor(
         }
     }
 
-    private fun setBackgroundColor(color: Int) {
-        _state.update { it.copy(color = color) }
+    fun handleIntent(intent: EditIntent) {
+        when (intent) {
+            is EditIntent.ChangeColor -> setBackgroundColor(intent.color)
+            is EditIntent.SaveNote -> updateNote(intent.note)
+            is EditIntent.ClearMessages -> resetMessages()
+        }
     }
 
+    private fun setBackgroundColor(color: Int) = _state.update { it.copy(color = color) }
     private fun updateNote(note: Note) {
         try {
             require(note.title.isNotBlank()) { "Title cannot be blank" }

@@ -10,12 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.noteappfirebase.core.showDeleteNoteDialog
 import com.example.noteappfirebase.core.showErrorSnackbar
 import com.example.noteappfirebase.core.showToast
 import com.example.noteappfirebase.databinding.FragmentHomeBinding
-import com.example.noteappfirebase.ui.adapter.NoteAdapter
-import com.example.noteappfirebase.ui.bottom_sheet.BottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,15 +47,13 @@ class HomeFragment : Fragment() {
 
         adapter.listener = object : NoteAdapter.Listener {
             override fun onClickNote(id: String) {
-                val action = HomeFragmentDirections.actionHomeToDetails(id)
-                findNavController().navigate(action)
+                findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(id))
             }
 
             override fun onLongClickNote(id: String) {
                 BottomSheetFragment(
                     onClickEdit = {
-                        val action = HomeFragmentDirections.actionToEdit(id)
-                        findNavController().navigate(action)
+                        findNavController().navigate(HomeFragmentDirections.actionToEdit(id))
                     },
                     onClickDelete = {
                         showDeleteNoteDialog(requireContext()) {
@@ -69,9 +66,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUiComponents() {
-        binding.fabAdd.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeToAdd()
-            findNavController().navigate(action)
+        binding.run {
+            // does not work if viewModel.handleIntent(HomeIntent.LoadUserImage) used
+            Glide.with(ivProfile).load(viewModel.getUserImage()).into(ivProfile)
+            tvLogout.setOnClickListener {
+                viewModel.handleIntent(HomeIntent.Logout)
+                findNavController().navigate(HomeFragmentDirections.actionHomeToLogin())
+            }
+            fabAdd.setOnClickListener {
+                findNavController().navigate(HomeFragmentDirections.actionHomeToAdd())
+            }
         }
     }
 
@@ -79,9 +83,9 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 binding.run {
-                    adapter.setNotes(state.notes)
                     tvLoading.isVisible = state.isLoading
                     if (!state.isLoading && state.errorMessage.isNullOrEmpty()) {
+                        adapter.setNotes(state.notes)
                         tvEmpty.isVisible = state.notes.isEmpty()
                     }
                     state.successMessage?.let {
