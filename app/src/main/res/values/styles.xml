@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Custom.EditText" parent="">
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:paddingHorizontal">@dimen/xs</item>
+        <item name="android:paddingVertical">@dimen/xs</item>
+    </style>
+    <style name="CircleButton">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

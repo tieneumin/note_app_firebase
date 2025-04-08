@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.edit.EditFragment">
+
+    <TextView
+        android:id="@+id/tvLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:id="@+id/llEdit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/l"
+        android:visibility="invisible">
+
+        <Space
+            android:layout_width="@dimen/zero"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1" />
+
+        <EditText
+            android:id="@+id/etTitle"
+            style="@style/Custom.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_title" />
+
+        <EditText
+            android:id="@+id/etDesc"
+            style="@style/Custom.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/m"
+            android:gravity="top"
+            android:hint="@string/enter_description"
+            android:minLines="10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnRed"
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="@dimen/xxxl"
+                android:layout_margin="@dimen/s"
+                android:backgroundTint="@color/option_red" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnOrange"
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="@dimen/xxxl"
+                android:layout_margin="@dimen/s"
+                android:backgroundTint="@color/option_orange" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnYellow"
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="@dimen/xxxl"
+                android:layout_margin="@dimen/s"
+                android:backgroundTint="@color/option_yellow" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnGreen"
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="@dimen/xxxl"
+                android:layout_margin="@dimen/s"
+                android:backgroundTint="@color/option_green" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnBlue"
+                android:layout_width="@dimen/xxxl"
+                android:layout_height="@dimen/xxxl"
+                android:layout_margin="@dimen/s"
+                android:backgroundTint="@color/option_blue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/m"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue"
+                android:text="@string/update" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/l"
+                android:backgroundTint="@color/red"
+                android:text="@string/cancel" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="@dimen/zero"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1" />
+    </LinearLayout>
+</FrameLayout>
