@@ -5,6 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.edit.EditFragment">
 
+    <TextView
+        android:id="@+id/tvLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
     <LinearLayout
         android:id="@+id/llEdit"
         android:layout_width="match_parent"
@@ -103,13 +112,4 @@
             android:layout_height="@dimen/zero"
             android:layout_weight="1" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/loading"
-        android:textSize="16sp"
-        android:textStyle="italic" />
 </FrameLayout>

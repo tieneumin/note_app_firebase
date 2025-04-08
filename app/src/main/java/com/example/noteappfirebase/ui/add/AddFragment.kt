@@ -69,17 +69,15 @@ class AddFragment : Fragment() {
     private fun setupStateObserver() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-                binding.run {
-                    llAdd.setBackgroundColor(state.color)
-                    state.successMessage?.let {
-                        showToast(requireContext(), it)
-                        viewModel.handleIntent(AddIntent.ClearMessages)
-                        findNavController().popBackStack()
-                    }
-                    state.errorMessage?.let {
-                        showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.handleIntent(AddIntent.ClearMessages)
-                    }
+                binding.llAdd.setBackgroundColor(state.color)
+                state.successMessage?.let {
+                    showToast(requireContext(), it)
+                    viewModel.handleIntent(AddIntent.ClearMessages)
+                    findNavController().popBackStack()
+                }
+                state.errorMessage?.let {
+                    showErrorSnackbar(requireView(), it, requireContext())
+                    viewModel.handleIntent(AddIntent.ClearMessages)
                 }
             }
         }

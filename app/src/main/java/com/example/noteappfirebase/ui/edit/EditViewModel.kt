@@ -32,10 +32,14 @@ class EditViewModel @Inject constructor(
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 val note = repo.getNoteById(id)
-                if (note != null) {
-                    _state.update { it.copy(note = note, color = note.color, isLoading = false) }
-                } else {
-                    _state.update { it.copy(errorMessage = "Note not found", isLoading = false) }
+                withContext(Dispatchers.Main) {
+                    _state.update {
+                        it.copy(
+                            note = note,
+                            errorMessage = if (note == null) "Note not found" else null,
+                            isLoading = false
+                        )
+                    }
                 }
             }
         } catch (e: Exception) {

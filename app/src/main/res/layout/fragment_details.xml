@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.details.DetailsFragment">
 
+    <TextView
+        android:id="@+id/tvLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/loading"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
     <LinearLayout
         android:id="@+id/llDetails"
         android:layout_width="match_parent"
@@ -71,13 +80,4 @@
             app:icon="@drawable/ic_back"
             app:iconGravity="textStart" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/loading"
-        android:textSize="16sp"
-        android:textStyle="italic" />
 </FrameLayout>

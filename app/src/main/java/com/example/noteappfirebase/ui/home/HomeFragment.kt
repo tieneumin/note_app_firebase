@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -34,9 +35,30 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAdapter()
         setupUiComponents()
         setupStateObserver()
+    }
+
+    private fun setupUiComponents() {
+        setupAdapter()
+        binding.run {
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String) = true
+                override fun onQueryTextChange(query: String): Boolean {
+                    viewModel.handleIntent(HomeIntent.SearchByQuery(query))
+                    return true
+                }
+            })
+            // viewModel.handleIntent(HomeIntent.LoadUserImage) does not work
+            Glide.with(ivProfile).load(viewModel.getUserImage()).into(ivProfile)
+            tvLogout.setOnClickListener {
+                viewModel.handleIntent(HomeIntent.Logout)
+                findNavController().navigate(HomeFragmentDirections.actionHomeToLogin())
+            }
+            fabAdd.setOnClickListener {
+                findNavController().navigate(HomeFragmentDirections.actionHomeToAdd())
+            }
+        }
     }
 
     private fun setupAdapter() {
@@ -65,37 +87,21 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupUiComponents() {
-        binding.run {
-            // does not work if viewModel.handleIntent(HomeIntent.LoadUserImage) used
-            Glide.with(ivProfile).load(viewModel.getUserImage()).into(ivProfile)
-            tvLogout.setOnClickListener {
-                viewModel.handleIntent(HomeIntent.Logout)
-                findNavController().navigate(HomeFragmentDirections.actionHomeToLogin())
-            }
-            fabAdd.setOnClickListener {
-                findNavController().navigate(HomeFragmentDirections.actionHomeToAdd())
-            }
-        }
-    }
-
     private fun setupStateObserver() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-                binding.run {
-                    tvLoading.isVisible = state.isLoading
-                    if (!state.isLoading && state.errorMessage.isNullOrEmpty()) {
-                        adapter.setNotes(state.notes)
-                        tvEmpty.isVisible = state.notes.isEmpty()
-                    }
-                    state.successMessage?.let {
-                        showToast(requireContext(), it)
-                        viewModel.handleIntent(HomeIntent.ClearMessages)
-                    }
-                    state.errorMessage?.let {
-                        showErrorSnackbar(requireView(), it, requireContext())
-                        viewModel.handleIntent(HomeIntent.ClearMessages)
-                    }
+                binding.tvLoading.isVisible = state.isLoading
+                if (state.notes != null) {
+                    adapter.setNotes(state.notes)
+                    binding.tvEmpty.isVisible = state.notes.isEmpty()
+                }
+                state.successMessage?.let {
+                    showToast(requireContext(), it)
+                    viewModel.handleIntent(HomeIntent.ClearMessages)
+                }
+                state.errorMessage?.let {
+                    showErrorSnackbar(requireView(), it, requireContext())
+                    viewModel.handleIntent(HomeIntent.ClearMessages)
                 }
             }
         }
